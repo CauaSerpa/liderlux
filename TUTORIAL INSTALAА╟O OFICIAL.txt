@@ -1,0 +1,25 @@
+OBRIGADO PELA COMPRA DO MELHOR ERP DO MERCADO!
+
+Temos um tutorial no youtube: https://www.youtube.com/watch?v=eh4XFhtSMdQ
+Ou se preferir siga o passo a passo abaixo em texto:
+
+1° Extraia o arquivo bigook-erp.zip no plublic_html da sua hospedagem, ou se for localmente no PC
+basta extrair na sua pasta do xampp.
+
+2° Crie um Banco de dados no phpmyadmin com qualquer nome e vá em importar, e importe o arquivo
+bigook-erp-01.sql 
+
+3° Vá nos arquivos que extraiu na pasta onde o site vai ficar é vá até a pasta seudominio/application/config
+e dentro da pasta config abra o arquivo database.php é insira os dados do banco de dados
+que você criou como usuario senha e nome do banco.
+Altere os seguintes campos.
+    'username' => 'Seu Usuario',
+    'password' => 'Sua Senha',
+    'database' => 'Seu Banco de dados',
+
+Ele já vem com o usuário administrador do sistema criado
+você pode mudar após o primeiro acesso
+
+- Administrador
+Email: admin@admin.com
+Senhas: admin
