@@ -1,6 +1,36 @@
 <style>
+.panel-body {
+    padding: 0 !important;
+}
+.row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+.col-sm-12, .col-sm-4 {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 0 !important;
+} 
 
 @media print {
+
+.panel-body {
+    padding: 0 !important;
+}
+.row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+.col-sm-12, .col-sm-4 {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 0 !important;
+} 
+
 .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6,
 .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
 float: left;               
@@ -77,6 +107,9 @@ float: right !impotant;
     width: 100%;
     max-width: 100%;
     margin-bottom: 20px;
+
+    margin-right: -15px !important;
+    margin-left: -15px !important;
 }
 table {
     background-color: transparent;
@@ -87,6 +120,7 @@ table {
 }  
 
 table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 0 !important;
     border-top: 1px solid #e4e5e7;
 } 
 
@@ -106,7 +140,7 @@ address {
 border-bottom: 2px #333 solid;
 }
 </style>
-<div class="row">
+<div id="invoice-html-manual" class="row p-0">
 <div class="col-sm-12">
 <div class="panel panel-bd">
     <div id="printableArea" onload="printDiv('printableArea')">
@@ -174,8 +208,8 @@ border-bottom: 2px #333 solid;
             </div> 
 
             <div class="table-responsive" id="product_infodiv">
-                <div class="col-sm-12 col-md-12 col-xs-12">
-                <table class="table table-striped" border="0" width="100%">
+                <div class="col-sm-12 col-md-12 col-xs-12 p-0">
+                <table class="table print-invoice table-striped" border="0" width="100%">
                     <thead>
                          <tr>
                             <th class="text-center"><?php echo display('sl') ?></th>
@@ -240,9 +274,9 @@ border-bottom: 2px #333 solid;
                     <p><strong><?php echo $invoice_details?></strong></p> 
                    
                 </div>
-                <div class="col-sm-4 inline-block">
+                <div class="col-sm-4 inline-block right">
 
-                    <table class="table">
+                    <table class="table print-invoice">
                         <?php
                         if ($invoice_all_data[0]['total_discount'] != 0) {
                             ?>

@@ -528,14 +528,28 @@ class Invoice extends MX_Controller {
     public function bdtask_manual_sales_insert(){
      $this->form_validation->set_rules('customer_id', display('customer_name') ,'required|max_length[15]');
     $this->form_validation->set_rules('paytype', display('payment_type') ,'required|max_length[20]');
-    $this->form_validation->set_rules('invoice_no', display('invoice_no') ,'required|max_length[20]|is_unique[invoice.invoice]');
+    $this->form_validation->set_rules('invoice_no', display('invoice_no'), 'required|max_length[20]');
     $this->form_validation->set_rules('product_id[]',display('product'),'required|max_length[20]');
     $this->form_validation->set_rules('product_quantity[]',display('quantity'),'required|max_length[20]');
     $this->form_validation->set_rules('product_rate[]',display('rate'),'required|max_length[20]');
     $normal = $this->input->post('is_normal');
 
     if ($this->form_validation->run() === true) {
-       $invoice_id = $this->invoice_model->invoice_entry();
+        $invoice_no = $this->input->post('invoice_no');
+
+        do {
+            $existe = $this->db
+                ->where('invoice', $invoice_no)
+                ->get('invoice')
+                ->num_rows();
+            if ($existe) {
+                $invoice_no = intval($invoice_no) + 1;
+            }
+        } while ($existe);
+
+        $_POST['invoice_no'] = $invoice_no;
+
+        $invoice_id = $this->invoice_model->invoice_entry();
         if(!empty($invoice_id)){
         $data['status'] = true;
         $data['invoice_id'] = $invoice_id;
@@ -961,6 +975,17 @@ class Invoice extends MX_Controller {
                 $invoice_detail[$k]['final_date'] = $invoice_detail[$k]['date'];
                 $subTotal_quantity = $subTotal_quantity + $invoice_detail[$k]['quantity'];
                 $subTotal_ammount = $subTotal_ammount + $invoice_detail[$k]['total_price'];
+            }
+
+            foreach ($invoice_detail as $k => $v) {
+                $rate = floatval($invoice_detail[$k]['rate']);
+                $disc = floatval($invoice_detail[$k]['discount_per']);
+
+                if ($rate > 0) {
+                    $rate -= ($disc / 100) * $rate;
+                }
+
+                $invoice_detail[$k]['rate'] = number_format($rate, 2, '.', '');
             }
 
             $i = 0;

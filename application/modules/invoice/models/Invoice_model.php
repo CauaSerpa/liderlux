@@ -1016,6 +1016,7 @@ if ($invoice_id != '') {
                         d.product_details,
                         d.unit,
                         d.product_model,
+                        c.rate,
                         a.paid_amount as paid_amount,
                         a.due_amount as due_amount'
                     );
