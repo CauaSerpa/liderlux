@@ -186,7 +186,8 @@ var j = 0;
             tx = f.toFixed(2, 2),
     ds = p.toFixed(2, 2);
 
-    var test = +tx + +s_cost + +e + -ds + + ad;
+    // var test = +tx + +s_cost + +e + -ds + + ad;
+    var test = +tx + +s_cost + +e + + ad; // Retira remocao do valor de desconto total
     $("#grandTotal").val(test.toFixed(2, 2));
 
 
