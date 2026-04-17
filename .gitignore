@@ -1,0 +1,61 @@
+# =========================
+# ENVIRONMENT
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# DEPENDENCIES
+# =========================
+/vendor/
+/node_modules/
+
+# =========================
+# CODEIGNITER LOGS & CACHE
+# =========================
+/application/logs/*
+!/application/logs/index.html
+
+/application/cache/*
+!/application/cache/index.html
+
+# =========================
+# UPLOADS (SE FOR LOCAL)
+/uploads/*
+!/uploads/index.html
+
+# =========================
+# SYSTEM FILES
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE / EDITORS
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# DOCKER (opcional mas recomendado)
+/docker/data/
+/docker/db/data/
+
+# =========================
+# TEST / BUILD ARTIFACTS
+# =========================
+/build/
+/dist/
+
+# =========================
+# PHP
+# =========================
+*.log
+*.cache
+*.sql
+
+# =========================
+# COMPOSER
+# =========================
+composer.lock
