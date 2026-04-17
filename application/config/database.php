@@ -1,0 +1,30 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$active_group = 'default';
+$query_builder = TRUE;
+$active_record = TRUE;//ci version 2.x
+
+$db['default'] = array(
+    'dsn'   => '',
+    'hostname' => getenv('DB_HOST') ?: '127.0.0.1',
+    'username' => getenv('DB_USERNAME') ?: '',
+    'password' => getenv('DB_PASSWORD') ?: '',
+    'database' => getenv('DB_DATABASE') ?: '',
+    'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => (ENVIRONMENT !== 'production'),
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt'  => FALSE,
+    'compress' => FALSE,
+    'autoinit' => TRUE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);
+ 
