@@ -9,7 +9,8 @@ on:
 jobs:
   deploy_hml:
     name: Deploy HML
-    if: github.ref == 'refs/heads/hml'
+    if: false
+    # if: github.ref == 'refs/heads/hml'
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -65,7 +66,8 @@ jobs:
 
   deploy_main:
     name: Deploy Production
-    if: github.ref == 'refs/heads/main'
+    if: false
+    # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
