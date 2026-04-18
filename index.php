@@ -36,6 +36,23 @@
  * @filesource
  */
 
+/**
+ * ------------------------------------------------------------
+ * LOAD .ENV (Ambiente local e Docker / CI/CD)
+ * ------------------------------------------------------------
+ * Isso permite usar variáveis de ambiente de forma segura
+ * mesmo em XAMPP, Docker e servidores de produção.
+ *
+ * Requer: composer require vlucas/phpdotenv
+ */
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+if (file_exists(__DIR__ . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+}
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -53,7 +70,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', getenv('CI_ENV') ?: 'production');
+	define('ENVIRONMENT', $_ENV['CI_ENV'] ?? getenv('CI_ENV') ?? 'production');
 
 /*
  *---------------------------------------------------------------

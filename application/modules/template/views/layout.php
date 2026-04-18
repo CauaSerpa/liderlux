@@ -24,6 +24,13 @@
       
         <!-- Site wrapper -->
         <div class="wrapper">
+
+            <?php 
+                // Carregar o banner (se não for produção)
+                if (ENVIRONMENT_SHOW_BANNER) {
+                    $this->load->view('includes/environment_banner');
+                }
+            ?>
  
             <header class="main-header"> 
                 <?php $this->load->view('includes/header') ?>
