@@ -1,0 +1,61 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - hml
+      - main
+
+jobs:
+
+  deploy_hml:
+    name: Deploy HML
+    if: github.ref == 'refs/heads/hml'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          script_stop: true
+          command_timeout: 10m
+          host: ${{ secrets.SERVER_HOST_HML }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -e
+
+            echo "Deploy HML iniciado..."
+
+            cd /srv/liderlux-hml
+
+            # Usar latest ou passar o SHA via artefato
+            docker pull ${{ secrets.DOCKER_USER }}/liderlux:latest
+            docker tag ${{ secrets.DOCKER_USER }}/liderlux:latest liderlux:current
+            docker compose up -d --no-deps --scale app=2
+            echo "Deploy HML finalizado"
+
+  deploy_main:
+    name: Deploy Production
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Deploy PROD
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          script_stop: true
+          command_timeout: 10m
+          host: ${{ secrets.SERVER_HOST_PROD }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -e
+            echo "Deploy PROD iniciado..."
+            cd /srv/liderlux-prod
+            docker pull ${{ secrets.DOCKER_USER }}/liderlux:latest
+            docker tag ${{ secrets.DOCKER_USER }}/liderlux:latest liderlux:current
+            docker compose up -d --no-deps --scale app=2
+            echo "Deploy PROD finalizado"
