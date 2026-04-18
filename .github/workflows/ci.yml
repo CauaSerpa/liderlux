@@ -73,12 +73,39 @@ jobs:
       #       -Dsonar.php.tests.reportPath=tests/_output/report.xml
       #       -Dsonar.php.coverage.reportPath=tests/_output/coverage.xml
 
-      # 6. BUILD DA IMAGEM DOCKER (TESTE DE BUILD)
+      # 6. BUILD DA IMAGEM DOCKER - DESABILITADO
       - name: Build Docker Image
-        if: success()
+        if: false  # Desabilitado - projeto não usa Docker
         run: |
           docker build --pull -t liderlux:test .
           echo "✅ Docker build successful"
+      
+      # 7. TESTE DE INTEGRAÇÃO - DESABILITADO
+      - name: Test Docker container
+        if: false
+        run: |
+          docker compose up -d
+          # ... resto do teste
+      
+      # 8. SEGURANÇA - DESABILITADO
+      - name: Security scan
+        if: false
+        run: |
+          docker scan liderlux:test || echo "⚠️ Docker scan not available"
+      
+      # 9. LOGIN E PUSH - DESABILITADO
+      - name: Login Docker Hub
+        if: false
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+      
+      - name: Push Docker Image
+        if: false
+        run: |
+          docker tag liderlux:test ${{ secrets.DOCKER_USER }}/liderlux:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/liderlux:${{ github.sha }}
 
       # 7. TESTE DE INTEGRAÇÃO (SOBE O CONTAINER)
       - name: Test Docker container
