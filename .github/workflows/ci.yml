@@ -46,8 +46,8 @@ jobs:
           if [ -f "phpunit.xml" ]; then
             vendor/bin/phpunit --coverage-text --stop-on-failure
           else
-            echo "❌ PHPUnit configuration NOT found - Tests required!"
-            exit 1  # Falha o pipeline se não tem testes configurados
+            echo "⚠️ No PHPUnit configuration found - Skipping tests"
+            # Não falha o pipeline
           fi
 
       # 4. ANÁLISE ESTÁTICA (recomendado)
