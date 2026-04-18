@@ -4,58 +4,190 @@
 .env
 .env.*
 !.env.example
+*.local
+*.development
+*.production
 
 # =========================
 # DEPENDENCIES
 # =========================
 /vendor/
 /node_modules/
+/composer.phar
 
 # =========================
 # CODEIGNITER LOGS & CACHE
 # =========================
 /application/logs/*
 !/application/logs/index.html
-
 /application/cache/*
 !/application/cache/index.html
+/application/config/config.php
+/application/config/database.php
 
 # =========================
 # UPLOADS (SE FOR LOCAL)
+# =========================
 /uploads/*
 !/uploads/index.html
+/application/uploads/*
 
 # =========================
 # SYSTEM FILES
 # =========================
 .DS_Store
 Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.directory
 
 # =========================
 # IDE / EDITORS
 # =========================
 .vscode/
 .idea/
+*.sublime-*
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+*.code-workspace
 
 # =========================
 # DOCKER (opcional mas recomendado)
+# =========================
 /docker/data/
 /docker/db/data/
+/docker/mysql/
+docker-compose.override.yml
+.docker/
+bin/
+docker-data/
+
+# =========================
+# SCRIPTS DE INSTALAÇÃO (NÃO COMMITAR)
+# =========================
+get-docker.sh
+install.sh
+*.tar.gz
+*.zip
 
 # =========================
 # TEST / BUILD ARTIFACTS
 # =========================
 /build/
 /dist/
+/temp/
+/tmp/
+*.tmp
+*.temp
 
 # =========================
-# PHP
+# PHP & WEB
 # =========================
 *.log
 *.cache
 *.sql
+*.sqlite
+*.sqlite-journal
+error_log
+access_log
 
 # =========================
 # COMPOSER
 # =========================
 composer.lock
+composer.phar
+auth.json
+
+# =========================
+# BACKUP FILES
+# =========================
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+
+# =========================
+# SECURITY
+# =========================
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+.secrets/
+secrets.yml
+
+# =========================
+# OS SPECIFIC
+# =========================
+# Windows
+ehthumbs.db
+ehthumbs_vista.db
+*.dll
+
+# Linux
+*.so
+*.dylib
+
+# macOS
+.AppleDouble
+.LSOverride
+._*
+
+# =========================
+# PACKAGE MANAGERS
+# =========================
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# =========================
+# CI/CD LOCAL (não commit)
+# =========================
+.act/
+act-output/
+github-act-*
+
+# =========================
+# DATABASE (local)
+# =========================
+*.sql
+*.sql.gz
+*.db
+*.db3
+backup.sql
+
+# =========================
+# SESSIONS
+# =========================
+/application/sessions/*
+!/application/sessions/index.html
+ci_session*
+
+# =========================
+# ERROR REPORTS
+# =========================
+error_log
+php_errors.log
+*.report
+
+# =========================
+# AUTOLOAD (CodeIgniter)
+# =========================
+/application/config/autoload.php.save
+
+# =========================
+# QUALITY TOOLS (local configs)
+# =========================
+.phpunit.result.cache
+.phpcs-cache
+.phpstan.cache
+.psalm
+coverage/
+.clover

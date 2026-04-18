@@ -49,13 +49,56 @@
        <script src="<?php echo base_url() ?>assets/js/wickedpicker.min.js" ></script>
         <script src="<?php echo base_url() ?>assets/js/jquery.validate.min.js" type="text/javascript"></script>
     </head>
-    <body>
+    <body class="container-login">
         <!-- Content Wrapper -->
-      
+
+            <?php 
+                // Carregar o banner (se não for produção)
+                if (ENVIRONMENT_SHOW_BANNER) {
+                    $this->load->view('includes/environment_banner');
+                }
+            ?>
+
             <div class="container-center">
 
-   <div class="panel panel-bd">
-                        <div class="panel-heading">
+                <!-- Demo Credentials com auto-fill -->
+                <?php if (ENVIRONMENT === 'demo'): ?>
+                    <div class="panel panel-bd">
+                        <div class="panel-body">
+                            <div class="header-title">
+                                <strong><i class="fa fa-key"></i> Credenciais de Demonstração:</strong>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                    <small>Email: <strong>admin@admin.com</strong></small>
+                                </div>
+                                <div class="col-md-12">
+                                    <small>Senha: <strong>admin</strong></small>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="fillDemoCredentials()">Preencher automaticamente</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function fillDemoCredentials() {
+                            document.getElementById('email').value = 'admin@admin.com';
+                            document.getElementById('password').value = 'admin';
+                            // Opcional: destacar os campos
+                            document.getElementById('email').style.borderColor = '#28a745';
+                            document.getElementById('password').style.borderColor = '#28a745';
+                            setTimeout(() => {
+                                document.getElementById('email').style.borderColor = '';
+                                document.getElementById('password').style.borderColor = '';
+                            }, 2000);
+                        }
+                    </script>
+                <?php endif; ?>
+    
+                <div class="panel panel-bd">
+                    <div class="panel-heading">
                         <div class="view-header">
                             <div class="header-icon">
                                 <i class="pe-7s-unlock"></i>

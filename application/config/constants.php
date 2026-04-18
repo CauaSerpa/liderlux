@@ -83,3 +83,79 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+/*
+|--------------------------------------------------------------------------
+| ENVIRONMENT CONFIGURATION
+|--------------------------------------------------------------------------
+|
+| Configurações baseadas no ambiente (production, homologation, demo, development)
+|
+*/
+
+// Definir ambiente baseado no ENVIRONMENT do index.php
+if (!defined('APP_ENVIRONMENT')) {
+    define('APP_ENVIRONMENT', ENVIRONMENT);
+}
+
+// Configurações de cada ambiente
+$env_configs = [
+    'production' => [
+        'name' => 'Produção',
+        'icon' => '🚀',
+        'color' => '#28a745',
+        'show_banner' => false,
+        'message' => ''
+    ],
+    'homologation' => [
+        'name' => 'Homologação',
+        'icon' => '⚠️',
+        'color' => '#ffc107',
+        'show_banner' => true,
+        'message' => 'Ambiente de testes - Dados não são reais'
+    ],
+    'demo' => [
+        'name' => 'Demonstração',
+        'icon' => '🎯',
+        'color' => '#6f42c1',
+        'show_banner' => true,
+        'message' => 'Ambiente demonstrativo'
+    ],
+    'development' => [
+        'name' => 'Desenvolvimento',
+        'icon' => '🔧',
+        'color' => '#17a2b8',
+        'show_banner' => true,
+        'message' => 'Ambiente de desenvolvimento'
+    ],
+    'testing' => [
+        'name' => 'Testes',
+        'icon' => '🧪',
+        'color' => '#fd7e14',
+        'show_banner' => true,
+        'message' => 'Ambiente de testes'
+    ]
+];
+
+// Aplicar configuração do ambiente atual
+$current_env = defined('ENVIRONMENT') ? ENVIRONMENT : 'production';
+$env = $env_configs[$current_env] ?? $env_configs['production'];
+
+define('ENVIRONMENT_NAME', $env['name']);
+define('ENVIRONMENT_ICON', $env['icon']);
+define('ENVIRONMENT_COLOR', $env['color']);
+define('ENVIRONMENT_SHOW_BANNER', $env['show_banner']);
+define('ENVIRONMENT_MESSAGE', $env['message']);
+
+// Função helper para verificar ambiente (opcional)
+if (!function_exists('is_production')) {
+    function is_production() {
+        return ENVIRONMENT === 'production';
+    }
+    function is_homologation() {
+        return ENVIRONMENT === 'homologation';
+    }
+    function is_demo() {
+        return ENVIRONMENT === 'demo';
+    }
+}
