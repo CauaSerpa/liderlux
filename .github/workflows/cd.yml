@@ -7,7 +7,6 @@ on:
       - main
 
 jobs:
-
   deploy_hml:
     name: Deploy HML
     if: github.ref == 'refs/heads/hml'
@@ -15,6 +14,9 @@ jobs:
     timeout-minutes: 10
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -25,24 +27,52 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             set -e
-
-            echo "Deploy HML iniciado..."
-
-            cd /srv/liderlux-hml
-
-            # Usar latest ou passar o SHA via artefato
-            docker pull ${{ secrets.DOCKER_USER }}/liderlux:latest
-            docker tag ${{ secrets.DOCKER_USER }}/liderlux:latest liderlux:current
-            docker compose up -d --no-deps --scale app=2
-            echo "Deploy HML finalizado"
+            echo "🚀 Deploy HML iniciado..."
+            cd /srv/liderlux-hml || exit 1
+            
+            # Salvar versão atual para rollback
+            CURRENT_IMAGE=$(docker inspect liderlux:current --format='{{.Config.Image}}' 2>/dev/null || echo "")
+            
+            # Baixar nova imagem (se existir) ou usar código local
+            if [ -n "${{ secrets.DOCKER_USER }}" ]; then
+              docker pull ${{ secrets.DOCKER_USER }}/liderlux:latest || echo "⚠️ No Docker image found, using local code"
+            fi
+            
+            # Atualizar código via git (método mais simples)
+            git pull origin hml
+            
+            # Recarregar containers
+            docker compose down --remove-orphans || true
+            docker compose up -d --build
+            
+            # Aguardar healthcheck
+            echo "⏳ Aguardando healthcheck..."
+            sleep 10
+            
+            # Verificar se app está rodando
+            if curl -f http://localhost:8085/health 2>/dev/null; then
+              echo "✅ Deploy HML finalizado com sucesso!"
+            else
+              echo "❌ Healthcheck falhou!"
+              # Rollback
+              if [ -n "$CURRENT_IMAGE" ]; then
+                echo "🔄 Executando rollback..."
+                docker tag $CURRENT_IMAGE liderlux:current
+                docker compose up -d
+              fi
+              exit 1
+            fi
 
   deploy_main:
     name: Deploy Production
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
       - name: Deploy PROD
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -53,9 +83,24 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             set -e
-            echo "Deploy PROD iniciado..."
-            cd /srv/liderlux-prod
-            docker pull ${{ secrets.DOCKER_USER }}/liderlux:latest
-            docker tag ${{ secrets.DOCKER_USER }}/liderlux:latest liderlux:current
-            docker compose up -d --no-deps --scale app=2
-            echo "Deploy PROD finalizado"
+            echo "🚀 Deploy PROD iniciado..."
+            cd /srv/liderlux-prod || exit 1
+            
+            # Backup antes do deploy
+            tar -czf backup-$(date +%Y%m%d-%H%M%S).tar.gz . --exclude=backup-*.tar.gz
+            
+            # Atualizar código
+            git pull origin main
+            
+            # Recarregar containers
+            docker compose down --remove-orphans || true
+            docker compose up -d --build
+            
+            # Verificar healthcheck
+            sleep 15
+            if curl -f http://localhost:8085/health 2>/dev/null; then
+              echo "✅ Deploy PROD finalizado com sucesso!"
+            else
+              echo "❌ Deploy PROD falhou!"
+              exit 1
+            fi
