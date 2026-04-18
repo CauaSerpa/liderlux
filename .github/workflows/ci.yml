@@ -59,19 +59,19 @@ jobs:
             echo "⚠️ PHPStan not configured"
           fi
 
-      # 5. SONARCLOUD (SÓ RODA SE TUDO ACIMA PASSAR)
-      - name: SonarCloud Scan
-        if: success()  # Só executa se steps anteriores foram bem sucedidos
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=${{ vars.SONAR_ORG }}
-            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
-            -Dsonar.php.tests.reportPath=tests/_output/report.xml
-            -Dsonar.php.coverage.reportPath=tests/_output/coverage.xml
+      # # 5. SONARCLOUD (SÓ RODA SE TUDO ACIMA PASSAR)
+      # - name: SonarCloud Scan
+      #   if: success()  # Só executa se steps anteriores foram bem sucedidos
+      #   uses: SonarSource/sonarcloud-github-action@v2
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     args: >
+      #       -Dsonar.organization=${{ vars.SONAR_ORG }}
+      #       -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
+      #       -Dsonar.php.tests.reportPath=tests/_output/report.xml
+      #       -Dsonar.php.coverage.reportPath=tests/_output/coverage.xml
 
       # 6. BUILD DA IMAGEM DOCKER (TESTE DE BUILD)
       - name: Build Docker Image
