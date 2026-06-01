@@ -18,24 +18,20 @@ on:
 
 jobs:
   ci:
-    name: Code Quality + Build
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "7.4"
           tools: composer
 
-      - name: Cache Composer
+      - name: Composer cache
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache
@@ -47,16 +43,16 @@ jobs:
       - name: PHP Syntax Check
         run: |
           find . \
-          -name "*.php" \
-          -not -path "./vendor/*" \
-          -exec php -l {} \;
+            -name "*.php" \
+            -not -path "./vendor/*" \
+            -exec php -l {} \;
 
       - name: PHPUnit
         run: |
           if [ -f phpunit.xml ]; then
             vendor/bin/phpunit
           else
-            echo "No tests configured."
+            echo "No PHPUnit configuration."
           fi
 
       - name: PHPStan
@@ -64,7 +60,7 @@ jobs:
           if [ -f vendor/bin/phpstan ]; then
             vendor/bin/phpstan analyse application --level=5
           else
-            echo "PHPStan not configured."
+            echo "PHPStan not installed."
           fi
 
       - name: Docker Build Validation
@@ -79,10 +75,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Final Status
-        if: always()
-        run: |
-          if [ "${{ job.status }}" != "success" ]; then
-            exit 1
-          fi
