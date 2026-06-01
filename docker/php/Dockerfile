@@ -1,15 +1,26 @@
 FROM php:7.4-fpm
 
-USER www-data
-
 ARG APP_ENV=local
 
 RUN apt-get update && apt-get install -y \
-    git curl unzip zip \
-    libpng-dev libzip-dev libxml2-dev libonig-dev \
+    git \
+    curl \
+    unzip \
+    zip \
+    libpng-dev \
+    libzip-dev \
+    libxml2-dev \
+    libonig-dev \
     default-mysql-client \
     && docker-php-ext-install \
-        pdo_mysql mysqli mbstring exif bcmath gd zip opcache \
+        pdo_mysql \
+        mysqli \
+        mbstring \
+        exif \
+        bcmath \
+        gd \
+        zip \
+        opcache \
     && docker-php-ext-enable opcache \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -28,17 +39,19 @@ RUN composer install \
 
 COPY . .
 
-RUN mkdir -p /var/www/application/cache \
-    && chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www
 
-COPY docker/php/php.ini /usr/local/etc/php/php.ini
-
-COPY docker/php/conf.d/opcache-${APP_ENV}.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker/php/php-${APP_ENV}.ini /usr/local/etc/php/php.ini
+COPY docker/php/conf.d/opcache-${APP_ENV}.ini \
+     /usr/local/etc/php/conf.d/opcache.ini
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+USER www-data
+
 EXPOSE 9000
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["php-fpm", "-F"]
+
+CMD ["php-fpm","-F"]
