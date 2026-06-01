@@ -8,6 +8,7 @@ $active_record = TRUE;//ci version 2.x
 $db['default'] = array(
     'dsn'   => '',
     'hostname' => $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? '127.0.0.1',
+    'port'     => $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? '',
     'username' => $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?? '',
     'password' => $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?? '',
     'database' => $_ENV['DB_DATABASE'] ?? getenv('DB_DATABASE') ?? '',

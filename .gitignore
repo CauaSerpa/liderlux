@@ -99,7 +99,6 @@ access_log
 # =========================
 # COMPOSER
 # =========================
-composer.lock
 composer.phar
 auth.json
 

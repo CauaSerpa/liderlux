@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/php/Dockerfile
+      args:
+        APP_ENV: staging
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+
+    env_file:
+      - ../.env.staging
+
+    environment:
+      CI_ENV: staging
+
+    restart: unless-stopped
+
+    networks:
+      - liderlux_staging
+
+  nginx:
+    image: nginx:alpine
+
+    ports:
+      - "8086:80"
+
+    volumes:
+      - ../docker/nginx/staging.conf:/etc/nginx/conf.d/default.conf
+
+    restart: unless-stopped
+
+    networks:
+      - liderlux_staging
+
+networks:
+  liderlux_staging:
+    driver: bridge
