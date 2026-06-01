@@ -87,7 +87,8 @@ switch (ENVIRONMENT)
 		ini_set('display_errors', 1);
 	break;
 
-	case 'demo':
+	case 'local':
+	case 'staging':
 	case 'testing':
 	case 'production':
 		ini_set('display_errors', 0);
@@ -338,7 +339,7 @@ Check Database Connection
 ----------------------------
 *********/
 include('application/config/database.php');
-$mysqli = new mysqli($db['default']['hostname'],$db['default']['username'],$db['default']['password'],$db['default']['database']);
+$mysqli = new mysqli($db['default']['hostname'],$db['default']['username'],$db['default']['password'],$db['default']['database'],$db['default']['port']);
 
 // Check connection
 if ($mysqli -> connect_errno) {

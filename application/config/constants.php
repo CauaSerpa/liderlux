@@ -89,7 +89,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 | ENVIRONMENT CONFIGURATION
 |--------------------------------------------------------------------------
 |
-| Configurações baseadas no ambiente (production, homologation, demo, development)
+| Configurações baseadas no ambiente (production, staging, local, development)
 |
 */
 
@@ -107,19 +107,12 @@ $env_configs = [
         'show_banner' => false,
         'message' => ''
     ],
-    'homologation' => [
+    'staging' => [
         'name' => 'Homologação',
         'icon' => '⚠️',
         'color' => '#ffc107',
         'show_banner' => true,
         'message' => 'Ambiente de testes - Dados não são reais'
-    ],
-    'demo' => [
-        'name' => 'Demonstração',
-        'icon' => '🎯',
-        'color' => '#6f42c1',
-        'show_banner' => true,
-        'message' => 'Ambiente demonstrativo'
     ],
     'development' => [
         'name' => 'Desenvolvimento',
@@ -134,7 +127,14 @@ $env_configs = [
         'color' => '#fd7e14',
         'show_banner' => true,
         'message' => 'Ambiente de testes'
-    ]
+    ],
+    'local' => [
+        'name' => 'Local',
+        'icon' => '💻',
+        'color' => '#007bff',
+        'show_banner' => true,
+        'message' => 'Ambiente local'
+    ],
 ];
 
 // Aplicar configuração do ambiente atual
@@ -152,10 +152,10 @@ if (!function_exists('is_production')) {
     function is_production() {
         return ENVIRONMENT === 'production';
     }
-    function is_homologation() {
-        return ENVIRONMENT === 'homologation';
+    function is_staging() {
+        return ENVIRONMENT === 'staging';
     }
-    function is_demo() {
-        return ENVIRONMENT === 'demo';
+    function is_local() {
+        return ENVIRONMENT === 'local';
     }
 }
