@@ -1,10 +1,23 @@
 services:
+
   app:
+    image: ghcr.io/cauaserpa/liderlux:staging
+
     build:
       context: ..
       dockerfile: docker/php/Dockerfile
       args:
         APP_ENV: staging
+
+    env_file:
+      - ../.env.staging
+
+    environment:
+      CI_ENV: staging
+
+    depends_on:
+      db:
+        condition: service_healthy
 
     deploy:
       resources:
@@ -15,30 +28,81 @@ services:
           cpus: "0.25"
           memory: 256M
 
+    restart: unless-stopped
+
+    volumes:
+      - ../:/var/www
+
+    networks:
+      - liderlux_staging
+
+
+  db:
+    image: mariadb:10.6
+
+    container_name: liderlux_db_staging
+
     env_file:
       - ../.env.staging
 
     environment:
-      CI_ENV: staging
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_DATABASE}
+      MARIADB_USER: ${DB_USERNAME}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-uroot",
+          "-p${DB_ROOT_PASSWORD}"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+    volumes:
+      - liderlux_db_staging:/var/lib/mysql
 
     restart: unless-stopped
 
     networks:
       - liderlux_staging
 
+
   nginx:
     image: nginx:alpine
+
+    depends_on:
+      - app
 
     ports:
       - "8086:80"
 
     volumes:
-      - ../docker/nginx/staging.conf:/etc/nginx/conf.d/default.conf
+      - ../:/var/www
+      - ../docker/nginx/staging.conf:/etc/nginx/conf.d/default.conf:ro
 
     restart: unless-stopped
 
     networks:
       - liderlux_staging
+
+
+volumes:
+  liderlux_db_staging:
+
 
 networks:
   liderlux_staging:
