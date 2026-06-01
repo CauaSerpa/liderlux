@@ -1,5 +1,7 @@
 FROM php:7.4-fpm
 
+USER www-data
+
 ARG APP_ENV=local
 
 RUN apt-get update && apt-get install -y \
