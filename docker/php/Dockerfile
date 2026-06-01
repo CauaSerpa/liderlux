@@ -1,46 +1,42 @@
-FROM php:8.2-fpm
+FROM php:7.4-fpm
 
-# Instalar dependências do sistema
+ARG APP_ENV=local
+
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    libzip-dev \
-    libpq-dev \
+    git curl unzip zip \
+    libpng-dev libzip-dev libxml2-dev libonig-dev \
+    default-mysql-client \
+    && docker-php-ext-install \
+        pdo_mysql mysqli mbstring exif bcmath gd zip opcache \
+    && docker-php-ext-enable opcache \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensões PHP
-RUN docker-php-ext-install pdo_mysql mysqli mbstring exif pcntl bcmath gd zip
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Instalar Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Configurar PHP
-RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "post_max_size = 100M" >> /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/uploads.ini
-
-# Configurar working directory
 WORKDIR /var/www
 
-# Copiar arquivos do projeto
+COPY composer.json composer.lock ./
+
+RUN composer install \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-dev
+
 COPY . .
 
-# Configurar permissões
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/writable 2>/dev/null || true
+RUN mkdir -p /var/www/application/cache \
+    && chown -R www-data:www-data /var/www
 
-# Instalar dependências PHP
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+COPY docker/php/php.ini /usr/local/etc/php/php.ini
 
-USER www-data
+COPY docker/php/conf.d/opcache-${APP_ENV}.ini /usr/local/etc/php/conf.d/opcache.ini
+
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 9000
 
-CMD ["php-fpm"]
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["php-fpm", "-F"]

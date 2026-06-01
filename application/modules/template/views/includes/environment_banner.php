@@ -75,7 +75,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 
     /* Ajuste no layout para o banner */
-    body.env-homologation,
+    body.env-staging,
     body.env-demo,
     body.env-development,
     body.env-testing {
@@ -94,7 +94,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 
     @media (max-width: 768px) {
-        body.env-homologation,
+        body.env-staging,
         body.env-demo,
         body.env-development,
         body.env-testing {
@@ -131,7 +131,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     function closeBanner() {
         document.getElementById('environmentBanner').style.display = 'none';
         document.getElementById('environmentBanner').classList.add('hide');
-        document.body.classList.remove('env-homologation', 'env-demo', 'env-development', 'env-testing');
+        document.body.classList.remove('env-staging', 'env-demo', 'env-development', 'env-testing');
         document.body.style.paddingTop = '0';
         // Opcional: salvar preferência
         localStorage.setItem('bannerClosed', 'true');

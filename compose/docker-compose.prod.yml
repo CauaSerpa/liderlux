@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+
+  app:
+
+    image:
+      ghcr.io/softhash/liderlux:${IMAGE_TAG}
+
+    container_name:
+      liderlux_app_prod
+
+    env_file:
+      - .env
+
+    restart:
+      unless-stopped
+
+    environment:
+      CI_ENV: production
+
+    networks:
+      - liderlux_prod
+
+  nginx:
+
+    image: nginx:alpine
+
+    container_name:
+      liderlux_nginx_prod
+
+    restart:
+      unless-stopped
+
+    ports:
+      - "8085:80"
+
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+
+    depends_on:
+      - app
+
+    networks:
+      - liderlux_prod
+
+networks:
+  liderlux_prod:
