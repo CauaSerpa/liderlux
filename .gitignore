@@ -162,6 +162,9 @@ github-act-*
 *.db3
 backup.sql
 
+# Permite apenas o script de inicialização do banco de dados, não os arquivos de backup ou dumps
+!docker/db/init/001_base.sql
+
 # =========================
 # SESSIONS
 # =========================
