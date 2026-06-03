@@ -3,6 +3,9 @@ services:
   app:
     image: ghcr.io/cauaserpa/liderlux:staging
 
+    volumes:
+      - ../:/var/www
+
     env_file:
       - ../.env.staging
 
