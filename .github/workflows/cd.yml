@@ -3,14 +3,14 @@ name: CD Pipeline
 on:
   push:
     branches:
-      - staging
+      - develop
       - main
 
 jobs:
 
   deploy-staging:
 
-    if: github.ref == 'refs/heads/staging'
+    if: github.ref == 'refs/heads/develop'
 
     runs-on: ubuntu-latest
 
@@ -26,19 +26,24 @@ jobs:
 
           script: |
 
+            set -e
+
             cd /srv/liderlux-staging
 
-            git pull origin staging
+            echo "🔄 Atualizando código..."
+            git fetch origin
+            git reset --hard origin/develop
 
-            export IMAGE_TAG=staging
-
+            echo "📦 Atualizando containers..."
             docker compose \
               -f compose/docker-compose.staging.yml \
               pull
 
             docker compose \
               -f compose/docker-compose.staging.yml \
-              up -d
+              up -d --remove-orphans
+
+            echo "✅ Deploy staging concluído"
 
 
   deploy-production:

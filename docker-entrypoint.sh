@@ -132,7 +132,12 @@ fi
 # ⚙️ MIGRATIONS
 # ==============================
 echo "Executando migrations..."
-php vendor/bin/phinx migrate -e development || true
+
+if [ -f vendor/bin/phinx ]; then
+    php vendor/bin/phinx migrate -e development
+else
+    echo "Phinx não encontrado (ok se migrations não usadas no staging)"
+fi
 
 # ==============================
 # 🚀 PHP-FPM
