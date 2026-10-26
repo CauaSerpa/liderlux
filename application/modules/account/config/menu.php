@@ -12,7 +12,7 @@ $HmvcMenu["accounts"] = array(
             "method"     => "index",
             "permission" => "create"
         ), 
-    );
+    ),
         
 
 );
