@@ -528,10 +528,10 @@ class Invoice extends MX_Controller {
 
 
         $this->load->library('pdfgenerator');
-        $dompdf = new DOMPDF();
+        $dompdf = $this->pdfgenerator->create();
         $page = $this->load->view('invoice/invoice_download', $data, true);
         $file_name = time();
-        $dompdf->load_html($page,'UTF-8');
+        $dompdf->loadHtml($page,'UTF-8');
         $dompdf->render();
         $output = $dompdf->output();
         file_put_contents("assets/data/pdf/invoice/$file_name.pdf", $output);
