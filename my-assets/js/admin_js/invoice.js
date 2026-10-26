@@ -725,7 +725,7 @@ $(document).ready(function(){
     if (inputValue === true) {
         // Cria um formulário temporário para enviar POST
         var form = $('<form>', {
-            action: 'https://liderlux.com.br/sistema/invoice_print',
+            action: window.invoicePrintUrl,
             method: 'POST',
             target: '_self'
         });

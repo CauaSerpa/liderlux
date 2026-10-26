@@ -1,3 +1,6 @@
+<script>
+    window.invoicePrintUrl = <?php echo json_encode(base_url('invoice_print')); ?>;
+</script>
 <script src="<?php echo base_url('my-assets/js/admin_js/invoice.js?v=') . time(); ?>" type="text/javascript"></script>
 <div class="row">
             <div class="col-sm-12">
