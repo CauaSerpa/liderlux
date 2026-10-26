@@ -240,8 +240,8 @@ if ($this->form_validation->run()) {
         $email   = $data['customer_info'][0]['customer_email'];
         $this->load->library('pdfgenerator');
         $html   = $this->load->view('quotation/quotation_invoice_pdf', $data, true);
-        $dompdf = new DOMPDF();
-        $dompdf->load_html($html);
+        $dompdf = $this->pdfgenerator->create();
+        $dompdf->loadHtml($html);
         $dompdf->render();
         $output = $dompdf->output();
         file_put_contents('assets/data/pdf/quotation/' . $id . '.pdf', $output);
@@ -885,8 +885,8 @@ if($this->input->post('paytype',TRUE) == 2){
 
         $this->load->library('pdfgenerator');
         $html = $this->load->view('invoice/invoice_download', $data, true);
-        $dompdf = new DOMPDF();
-        $dompdf->load_html($html);
+        $dompdf = $this->pdfgenerator->create();
+        $dompdf->loadHtml($html);
         $dompdf->render();
         $output = $dompdf->output();
         file_put_contents('assets/data/pdf/invoice/' . $id . '.pdf', $output);
@@ -975,8 +975,8 @@ if($this->input->post('paytype',TRUE) == 2){
         );
         $this->load->library('pdfgenerator');
         $html = $this->load->view('service/invoice_download', $data, true);
-        $dompdf = new DOMPDF();
-        $dompdf->load_html($html);
+        $dompdf = $this->pdfgenerator->create();
+        $dompdf->loadHtml($html);
         $dompdf->render();
         $output = $dompdf->output();
         file_put_contents('assets/data/pdf/service/' . $id . '.pdf', $output);
@@ -1246,10 +1246,10 @@ if($this->input->post('paytype',TRUE) == 2){
         $data['currency_details'] = $currency_details;
 
         $this->load->library('pdfgenerator');
-        $dompdf = new DOMPDF();
+        $dompdf = $this->pdfgenerator->create();
         $page = $this->load->view('quotation/quotation_download', $data, true);
         $file_name = time();
-        $dompdf->load_html($page);
+        $dompdf->loadHtml($page);
         $dompdf->render();
         $output = $dompdf->output();
         file_put_contents("assets/data/pdf/quotation/$file_name.pdf", $output);

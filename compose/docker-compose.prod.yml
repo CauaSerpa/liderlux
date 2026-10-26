@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/softhash/liderlux:${IMAGE_TAG}
+    image: ghcr.io/cauaserpa/liderlux:${IMAGE_TAG}
 
     deploy:
       resources:
@@ -12,7 +12,7 @@ services:
           memory: 1G
 
     env_file:
-      - .env
+      - ../.env
 
     environment:
       CI_ENV: production
@@ -25,6 +25,9 @@ services:
   nginx:
     image: nginx:alpine
 
+    depends_on:
+      - app
+
     deploy:
       resources:
         limits:
@@ -32,10 +35,11 @@ services:
           memory: 128M
 
     ports:
-      - "8085:80"
+      - "127.0.0.1:8085:80"
 
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ../:/var/www:ro
+      - ../docker/nginx/production.conf:/etc/nginx/conf.d/default.conf:ro
 
     restart: unless-stopped
 

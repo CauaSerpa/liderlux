@@ -32,7 +32,7 @@ class Auth_model extends CI_Model {
             role_permission.delete
             ")
             ->from('role_permission')
-            ->join('sub_module', 'sub_module.id = role_permission.fk_module_id', 'full')
+            ->join('sub_module', 'sub_module.id = role_permission.fk_module_id', 'inner')
             ->where('role_permission.role_id', $id)
             ->where('sub_module.status', 1)
             ->group_start()
@@ -66,7 +66,7 @@ class Auth_model extends CI_Model {
                     IF(SUM(role_permission.delete) >= 1,1,0) AS 'delete'
                 ")
                 ->from('role_permission')
-                ->join('sub_module', 'sub_module.id = role_permission.fk_module_id', 'full')
+                ->join('sub_module', 'sub_module.id = role_permission.fk_module_id', 'inner')
                 ->where_in('role_permission.role_id',$roleid)
                 ->where('sub_module.status', 1)
                 ->group_by('role_permission.fk_module_id')
